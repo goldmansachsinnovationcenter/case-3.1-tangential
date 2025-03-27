@@ -1,0 +1,29 @@
+"""Application configuration."""
+import os
+from pathlib import Path
+from pydantic_settings import BaseSettings
+
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+
+
+class Settings(BaseSettings):
+    """Application settings."""
+    API_V1_STR: str = "/api"
+    PROJECT_NAME: str = "HackerNews Viewer"
+
+    DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{ROOT_DIR}/hackernews.db")
+    
+    HACKERNEWS_API_URL: str = "https://hacker-news.firebaseio.com/v0"
+    
+    TOP_STORIES_LIMIT: int = 5
+    TOP_COMMENTS_LIMIT: int = 10
+    
+    BACKUP_DIR: str = os.getenv("BACKUP_DIR", f"{ROOT_DIR}/backups")
+    
+    class Config:
+        """Pydantic config."""
+        env_file = ".env"
+        case_sensitive = True
+
+
+settings = Settings()
