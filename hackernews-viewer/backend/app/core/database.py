@@ -1,7 +1,5 @@
 """Database connection and session management."""
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlmodel import Session, SQLModel, create_engine
 from sqlalchemy.pool import StaticPool
 
 from app.core.config import settings
@@ -12,15 +10,12 @@ engine = create_engine(
     poolclass=StaticPool,
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
 
 
 def get_db():
     """Get database session."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    with Session(engine) as session:
+        try:
+            yield session
+        finally:
+            session.close()

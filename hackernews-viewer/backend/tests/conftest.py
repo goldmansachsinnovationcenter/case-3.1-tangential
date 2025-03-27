@@ -3,13 +3,11 @@ import os
 import sys
 import pytest
 import asyncio
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlmodel import SQLModel, Session, create_engine
 from sqlalchemy.pool import StaticPool
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.db.models import Base
 from app.core.database import get_db
 
 
@@ -30,17 +28,19 @@ def test_db():
         poolclass=StaticPool,
     )
     
-    Base.metadata.create_all(engine)
+    SQLModel.metadata.create_all(engine)
     
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    def get_session():
+        with Session(engine) as session:
+            yield session
     
-    return TestingSessionLocal
+    return get_session
 
 
 @pytest.fixture
 def db_session(test_db):
     """Get a database session for testing."""
-    session = test_db()
+    session = next(test_db())
     try:
         yield session
     finally:

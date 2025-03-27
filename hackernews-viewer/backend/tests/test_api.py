@@ -3,6 +3,7 @@ import pytest
 from datetime import datetime
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
+from sqlmodel import Session
 
 from app.main import app
 from app.core.database import get_db
