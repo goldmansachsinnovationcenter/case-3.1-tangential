@@ -5,7 +5,7 @@ from typing import List, Dict, Any, Optional
 import logging
 
 import httpx
-from sqlalchemy.orm import Session
+from sqlmodel import Session
 
 from app.core.config import settings
 from app.db import crud, models

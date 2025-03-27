@@ -1,14 +1,14 @@
 """Main FastAPI application."""
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
+from sqlmodel import Session
 
 from app.api.endpoints import stories, users, system
 from app.core.config import settings
 from app.core.database import get_db, engine
-from app.db.models import Base
+from app.db.models import SQLModel
 
-Base.metadata.create_all(bind=engine)
+SQLModel.metadata.create_all(bind=engine)
 
 app = FastAPI(title="HackerNews Viewer API")
 
@@ -37,4 +37,4 @@ async def health():
 @app.on_event("startup")
 async def startup_event():
     """Run startup tasks."""
-    Base.metadata.create_all(bind=engine)
+    SQLModel.metadata.create_all(bind=engine)

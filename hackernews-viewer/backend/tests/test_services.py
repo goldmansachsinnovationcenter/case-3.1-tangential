@@ -89,7 +89,9 @@ async def test_get_top_stories(hn_service):
 @pytest.mark.asyncio
 async def test_process_user(hn_service):
     """Test the process_user method."""
-    hn_service.db.query.return_value.filter.return_value.first.return_value = None
+    mock_exec_result = MagicMock()
+    mock_exec_result.first.return_value = None
+    hn_service.db.exec = MagicMock(return_value=mock_exec_result)
     
     hn_service.get_user = AsyncMock(return_value={
         "id": "testuser",
@@ -131,7 +133,9 @@ async def test_process_story(hn_service):
     
     hn_service.process_user = AsyncMock(return_value=1)
     
-    hn_service.db.query.return_value.filter.return_value.first.return_value = None
+    mock_exec_result = MagicMock()
+    mock_exec_result.first.return_value = None
+    hn_service.db.exec = MagicMock(return_value=mock_exec_result)
     
     mock_story = MagicMock()
     mock_story.story_id = 1

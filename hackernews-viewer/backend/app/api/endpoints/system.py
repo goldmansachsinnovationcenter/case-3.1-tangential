@@ -1,6 +1,6 @@
 """API endpoints for system operations."""
 from fastapi import APIRouter, Depends, BackgroundTasks
-from sqlalchemy.orm import Session
+from sqlmodel import Session
 
 from app.core.database import get_db
 from app.db import crud
