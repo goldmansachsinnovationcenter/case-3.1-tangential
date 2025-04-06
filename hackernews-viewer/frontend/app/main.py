@@ -5,9 +5,9 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 
-from app.components.story_card import story_card
-from app.components.comment_card import comment_thread
-from app.utils.api import (
+from components.story_card import story_card
+from components.comment_card import comment_thread
+from utils.api import (
     get_top_stories, 
     get_story, 
     get_story_comments, 

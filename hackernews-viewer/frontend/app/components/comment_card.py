@@ -44,21 +44,31 @@ def comment_card(comment: Dict[str, Any], level: int = 0):
         if indent > 0:
             cols = st.columns([indent, 1000 - indent])
             container = cols[1]
+            
+            with container:
+                container.markdown(
+                    f"**{comment.get('by', 'unknown')}** • "
+                    f"{format_time(comment.get('time'))}"
+                )
+                
+                if comment.get("text"):
+                    container.markdown(comment.get("text"))
+                else:
+                    container.markdown("*[deleted]*")
+                
+                container.markdown("---")
         else:
-            container = st
-        
-        with container:
-            container.markdown(
+            st.markdown(
                 f"**{comment.get('by', 'unknown')}** • "
                 f"{format_time(comment.get('time'))}"
             )
             
             if comment.get("text"):
-                container.markdown(comment.get("text"))
+                st.markdown(comment.get("text"))
             else:
-                container.markdown("*[deleted]*")
+                st.markdown("*[deleted]*")
             
-            container.markdown("---")
+            st.markdown("---")
 
 
 def comment_thread(comments: List[Dict[str, Any]]):
