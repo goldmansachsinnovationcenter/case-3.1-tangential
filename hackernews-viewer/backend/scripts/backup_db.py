@@ -14,7 +14,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler(Path(__file__).resolve().parent.parent / "logs" / "backup.log"),
+        logging.FileHandler(Path(settings.DATA_DIR) / "logs" / "backup.log"),
         logging.StreamHandler()
     ]
 )
@@ -68,8 +68,8 @@ def cleanup_old_backups(backup_dir, keep=10):
 
 
 if __name__ == "__main__":
-    logs_dir = Path(__file__).resolve().parent.parent / "logs"
-    logs_dir.mkdir(exist_ok=True)
+    logs_dir = Path(settings.DATA_DIR) / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
     
     logger.info("Starting database backup")
     success = backup_database()
