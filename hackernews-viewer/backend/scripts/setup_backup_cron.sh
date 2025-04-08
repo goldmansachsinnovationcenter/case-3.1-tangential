@@ -1,6 +1,6 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-BACKUP_SCRIPT="$SCRIPT_DIR/backup_db.py"
+BACKUP_SCRIPT="$SCRIPT_DIR/run_backup.py"
 
 chmod +x "$BACKUP_SCRIPT"
 
