@@ -11,18 +11,19 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api"
     PROJECT_NAME: str = "HackerNews Viewer"
 
-    DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{ROOT_DIR}/hackernews.db")
+    DATA_DIR: str = os.getenv("DATA_DIR", f"{ROOT_DIR}/data")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{DATA_DIR}/hackernews.db")
     
     HACKERNEWS_API_URL: str = "https://hacker-news.firebaseio.com/v0"
     
     TOP_STORIES_LIMIT: int = 5
     TOP_COMMENTS_LIMIT: int = 10
     
-    BACKUP_DIR: str = os.getenv("BACKUP_DIR", f"{ROOT_DIR}/backups")
+    BACKUP_DIR: str = os.getenv("BACKUP_DIR", f"{DATA_DIR}/backups")
     
     class Config:
         """Pydantic config."""
-        env_file = ".env"
+        env_file = "../../.env"  # Updated path to point to hackernews-viewer/.env
         case_sensitive = True
 
 
