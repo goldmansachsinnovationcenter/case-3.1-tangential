@@ -25,7 +25,7 @@ Backend service for the HackerNews Viewer application, built with FastAPI and SQ
 
 3. Run the application:
    ```
-   poetry run uvicorn app.main:app --reload
+   poetry run uvicorn app.main:app --reload --env-file ../.env
    ```
 
 4. Access the API documentation:
