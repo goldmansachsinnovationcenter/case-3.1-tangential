@@ -1,10 +1,11 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 REFRESH_SCRIPT="$SCRIPT_DIR/refresh_data.py"
-cd "$SCRIPT_DIR/.."
+cd "$SCRIPT_DIR/../.."  # Changed to navigate to hackernews-viewer/ directory
 
 mkdir -p "$(grep DATA_DIR .env | cut -d= -f2)/logs"
 
+cd "backend" 
 chmod +x "$REFRESH_SCRIPT"
 
 echo "Starting data refresh script in foreground mode."

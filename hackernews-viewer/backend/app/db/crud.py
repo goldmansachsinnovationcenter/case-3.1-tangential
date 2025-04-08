@@ -9,12 +9,12 @@ from app.db.models import DimUser, DimStory, DimComment, FactStoryComment, FactR
 
 def get_user(db: Session, user_id: int) -> Optional[DimUser]:
     """Get a user by ID."""
-    return db.exec(select(DimUser).where(DimUser.user_id == user_id)).first()
+    return db.execute(select(DimUser).where(DimUser.user_id == user_id)).first()
 
 
 def get_user_by_username(db: Session, username: str) -> Optional[DimUser]:
     """Get a user by username."""
-    return db.exec(select(DimUser).where(DimUser.username == username)).first()
+    return db.execute(select(DimUser).where(DimUser.username == username)).first()
 
 
 def create_user(db: Session, username: str, karma: Optional[int] = None,
@@ -47,17 +47,17 @@ def update_user(db: Session, user_id: int, data: Dict[str, Any]) -> Optional[Dim
 
 def get_story(db: Session, story_id: int) -> Optional[DimStory]:
     """Get a story by ID."""
-    return db.exec(select(DimStory).where(DimStory.story_id == story_id)).first()
+    return db.execute(select(DimStory).where(DimStory.story_id == story_id)).first()
 
 
 def get_story_by_hn_id(db: Session, hn_id: int) -> Optional[DimStory]:
     """Get a story by HackerNews ID."""
-    return db.exec(select(DimStory).where(DimStory.hn_id == hn_id)).first()
+    return db.execute(select(DimStory).where(DimStory.hn_id == hn_id)).first()
 
 
 def get_top_stories(db: Session, limit: int = 5) -> List[DimStory]:
     """Get top stories."""
-    return db.exec(select(DimStory).where(DimStory.is_top == True).order_by(DimStory.score.desc()).limit(limit)).all()
+    return db.execute(select(DimStory).where(DimStory.is_top == True).order_by(DimStory.score.desc()).limit(limit)).all()
 
 
 def create_story(db: Session, hn_id: int, title: str, url: Optional[str] = None,
@@ -99,7 +99,7 @@ def update_story(db: Session, story_id: int, data: Dict[str, Any]) -> Optional[D
 
 def mark_top_stories(db: Session, story_ids: List[int]) -> None:
     """Mark stories as top stories."""
-    stories = db.exec(select(DimStory)).all()
+    stories = db.execute(select(DimStory)).all()
     for story in stories:
         story.is_top = False
     
@@ -113,12 +113,12 @@ def mark_top_stories(db: Session, story_ids: List[int]) -> None:
 
 def get_comment(db: Session, comment_id: int) -> Optional[DimComment]:
     """Get a comment by ID."""
-    return db.exec(select(DimComment).where(DimComment.comment_id == comment_id)).first()
+    return db.execute(select(DimComment).where(DimComment.comment_id == comment_id)).first()
 
 
 def get_comment_by_hn_id(db: Session, hn_id: int) -> Optional[DimComment]:
     """Get a comment by HackerNews ID."""
-    return db.exec(select(DimComment).where(DimComment.hn_id == hn_id)).first()
+    return db.execute(select(DimComment).where(DimComment.hn_id == hn_id)).first()
 
 
 def get_top_comments_for_story(db: Session, story_id: int, limit: int = 10) -> List[DimComment]:
@@ -130,7 +130,7 @@ def get_top_comments_for_story(db: Session, story_id: int, limit: int = 10) -> L
         .order_by(FactStoryComment.comment_rank)
         .limit(limit)
     )
-    return db.exec(statement).all()
+    return db.execute(statement).all()
 
 
 def create_comment(db: Session, hn_id: int, text: Optional[str] = None,
@@ -198,4 +198,4 @@ def log_refresh(db: Session, stories_refreshed: int, comments_refreshed: int,
 
 def get_last_refresh(db: Session) -> Optional[FactRefreshLog]:
     """Get the last refresh log entry."""
-    return db.exec(select(FactRefreshLog).order_by(FactRefreshLog.refresh_time.desc())).first()
+    return db.execute(select(FactRefreshLog).order_by(FactRefreshLog.refresh_time.desc())).first()

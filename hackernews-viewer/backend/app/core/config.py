@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     
     class Config:
         """Pydantic config."""
-        env_file = ".env"
+        env_file = "../../.env"  # Updated path to point to hackernews-viewer/.env
         case_sensitive = True
 
 

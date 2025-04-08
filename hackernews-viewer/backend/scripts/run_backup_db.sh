@@ -1,10 +1,11 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 BACKUP_SCRIPT="$SCRIPT_DIR/backup_db.py"
-cd "$SCRIPT_DIR/.."
+cd "$SCRIPT_DIR/../.."  # Changed to navigate to hackernews-viewer/ directory
 
 mkdir -p "$(grep DATA_DIR .env | cut -d= -f2)/logs"
 
+cd "backend" 
 chmod +x "$BACKUP_SCRIPT"
 
 echo "Starting database backup script in foreground mode."
