@@ -5,8 +5,7 @@ cd "$SCRIPT_DIR/../.."  # Changed to navigate to hackernews-viewer/ directory
 
 mkdir -p "$(grep DATA_DIR .env | cut -d= -f2)/logs"
 
-cd "backend"  # Return to backend directory for script execution
-
+cd "backend" 
 chmod +x "$BACKUP_SCRIPT"
 
 echo "Starting database backup script in foreground mode."

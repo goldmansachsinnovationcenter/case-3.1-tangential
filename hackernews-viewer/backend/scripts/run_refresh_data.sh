@@ -5,8 +5,7 @@ cd "$SCRIPT_DIR/../.."  # Changed to navigate to hackernews-viewer/ directory
 
 mkdir -p "$(grep DATA_DIR .env | cut -d= -f2)/logs"
 
-cd "backend"  # Return to backend directory for script execution
-
+cd "backend" 
 chmod +x "$REFRESH_SCRIPT"
 
 echo "Starting data refresh script in foreground mode."
