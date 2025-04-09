@@ -61,7 +61,8 @@ def get_story_by_hn_id(db: Session, hn_id: int) -> Optional[DimStory]:
 
 def get_top_stories(db: Session, limit: int = 5) -> List[DimStory]:
     """Get top stories."""
-    return db.execute(select(DimStory).where(DimStory.is_top == True).order_by(DimStory.score.desc()).limit(limit)).all()
+    results = db.execute(select(DimStory).where(DimStory.is_top == True).order_by(DimStory.score.desc()).limit(limit)).all()
+    return [row[0] for row in results] if results else []
 
 
 def create_story(db: Session, hn_id: int, title: str, url: Optional[str] = None,
