@@ -103,8 +103,9 @@ def update_story(db: Session, story_id: int, data: Dict[str, Any]) -> Optional[D
 
 def mark_top_stories(db: Session, story_ids: List[int]) -> None:
     """Mark stories as top stories."""
-    stories = db.execute(select(DimStory)).all()
-    for story in stories:
+    stories_result = db.execute(select(DimStory)).all()
+    for story_row in stories_result:
+        story = story_row[0]  # Extract the model object from the row
         story.is_top = False
     
     for story_id in story_ids:
