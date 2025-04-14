@@ -42,23 +42,23 @@ class HackerNewsService:
             
             if not data_dir.exists():
                 error_msg = f"DATA_DIR at {data_dir} does not exist"
-                logger.error(error_msg)
+                logger.error(f"P1: {error_msg}")
                 return error_msg
                 
             if not os.access(data_dir, os.R_OK):
                 error_msg = f"DATA_DIR at {data_dir} is not readable"
-                logger.error(error_msg)
+                logger.error(f"P1: {error_msg}")
                 return error_msg
                 
             if not os.access(data_dir, os.W_OK):
                 error_msg = f"DATA_DIR at {data_dir} is not writable"
-                logger.error(error_msg)
+                logger.error(f"P1: {error_msg}")
                 return error_msg
                 
             return None
         except Exception as e:
             error_msg = f"Error checking DATA_DIR access: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"P1: {error_msg}")
             return error_msg
     
     def _check_disk_space(self, min_free_percent=10) -> Optional[str]:
@@ -77,13 +77,13 @@ class HackerNewsService:
             
             if free_percent < min_free_percent:
                 error_msg = f"Disk space critically low: {free_percent:.1f}% free, {free / (1024*1024*1024):.2f} GB"
-                logger.error(error_msg)
+                logger.error(f"P1: {error_msg}")
                 return error_msg
                 
             return None
         except Exception as e:
             error_msg = f"Error checking disk space: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"P1: {error_msg}")
             return error_msg
             
     def _check_database_integrity(self) -> Optional[str]:
@@ -97,7 +97,7 @@ class HackerNewsService:
             
             if not db_path.exists():
                 error_msg = f"Database file at {db_path} does not exist"
-                logger.error(error_msg)
+                logger.error(f"P0: {error_msg}")
                 return error_msg
                 
             conn = sqlite3.connect(str(db_path))
@@ -109,17 +109,17 @@ class HackerNewsService:
             
             if not result or result[0] != "ok":
                 error_msg = f"Database corruption detected in {db_path}: {result[0] if result else 'unknown error'}"
-                logger.error(error_msg)
+                logger.error(f"P0: {error_msg}")
                 return error_msg
                 
             return None
         except sqlite3.Error as e:
             error_msg = f"Database access error: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"P0: {error_msg}")
             return error_msg
         except Exception as e:
             error_msg = f"Error checking database integrity: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"P0: {error_msg}")
             return error_msg
     
     async def _check_api_availability(self) -> Optional[str]:
@@ -134,11 +134,11 @@ class HackerNewsService:
             return None
         except httpx.HTTPError as e:
             error_msg = f"HackerNews API is unavailable: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"P1: {error_msg}")
             return error_msg
         except Exception as e:
             error_msg = f"Error checking API availability: {str(e)}"
-            logger.error(error_msg)
+            logger.error(f"P1: {error_msg}")
             return error_msg
 
     async def get_item(self, item_id: int) -> Optional[Dict[str, Any]]:
@@ -148,7 +148,7 @@ class HackerNewsService:
             response.raise_for_status()
             return response.json()
         except httpx.HTTPError as e:
-            logger.error(f"Error fetching item {item_id}: {e}")
+            logger.error(f"P3: Error fetching item {item_id}: {e}")
             return None
 
     async def get_user(self, username: str) -> Optional[Dict[str, Any]]:
@@ -158,7 +158,7 @@ class HackerNewsService:
             response.raise_for_status()
             return response.json()
         except httpx.HTTPError as e:
-            logger.error(f"Error fetching user {username}: {e}")
+            logger.error(f"P3: Error fetching user {username}: {e}")
             return None
 
     async def get_top_stories(self) -> List[int]:
@@ -168,7 +168,7 @@ class HackerNewsService:
             response.raise_for_status()
             return response.json()[:settings.TOP_STORIES_LIMIT]
         except httpx.HTTPError as e:
-            logger.error(f"Error fetching top stories: {e}")
+            logger.error(f"P2: Error fetching top stories: {e}")
             return []
 
     async def process_user(self, username: str) -> Optional[int]:
@@ -199,7 +199,7 @@ class HackerNewsService:
         """Process a story and store in the database."""
         story_data = await self.get_item(story_id)
         if not story_data or story_data.get("type") != "story":
-            logger.warning(f"Item {story_id} is not a valid story")
+            logger.warning(f"P3: Item {story_id} is not a valid story")
             return None
 
         by_user_id = await self.process_user(story_data.get("by"))
@@ -240,7 +240,7 @@ class HackerNewsService:
         """Process a comment and store in the database."""
         comment_data = await self.get_item(comment_id)
         if not comment_data or comment_data.get("type") != "comment":
-            logger.warning(f"Item {comment_id} is not a valid comment")
+            logger.warning(f"P3: Item {comment_id} is not a valid comment")
             return None
 
         by_user_id = await self.process_user(comment_data.get("by"))
@@ -330,7 +330,7 @@ class HackerNewsService:
             return self._log_refresh(len(db_story_ids), total_comments, "success")
 
         except Exception as e:
-            logger.exception(f"Error refreshing data: {str(e)}")
+            logger.exception(f"P1: Error refreshing data: {str(e)}")
             return self._log_refresh(0, 0, "error", str(e))
 
     def _log_refresh(self, stories_count: int, comments_count: int, 
