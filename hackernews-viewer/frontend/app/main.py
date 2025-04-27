@@ -2,7 +2,6 @@
 import streamlit as st
 import asyncio
 from datetime import datetime
-import os
 from dotenv import load_dotenv
 
 from components.story_card import story_card
@@ -11,7 +10,6 @@ from utils.api import (
     get_top_stories, 
     get_story, 
     get_story_comments, 
-    get_user, 
     get_system_status, 
     trigger_refresh
 )
@@ -78,6 +76,10 @@ with st.sidebar:
             result = asyncio.run(trigger_refresh())
             st.session_state.refresh_status = "Refresh started"
             st.success("Refresh started")
+            
+            updated_status = asyncio.run(load_status())
+            if updated_status["status"] == "ok":
+                st.session_state.refresh_status = None  # Clear error message on successful refresh
         except Exception as e:
             st.session_state.refresh_status = f"Error: {str(e)}"
             st.error(f"Error: {str(e)}")
