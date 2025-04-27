@@ -105,6 +105,7 @@ elif st.session_state.view == "story_detail":
     if st.session_state.selected_story:
         if st.button("← Back to Stories"):
             go_home()
+            st.rerun()
         
         async def load_story_detail():
             try:
